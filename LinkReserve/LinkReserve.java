@@ -8,7 +8,6 @@ import java.rmi.server.RemoteServer;
  *
  */
 public class LinkReserve {
-	
 	/** 
 	 * 链表节点
 	 * @author wangpeiyu
