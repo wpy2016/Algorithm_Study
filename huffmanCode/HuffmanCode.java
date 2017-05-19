@@ -2,6 +2,8 @@ package huffmanCode;
 
 import java.util.PriorityQueue;
 
+import BinaryTree.BinaryTree;
+
 abstract class HuffmanTree implements Comparable<HuffmanTree> {
     public final int frequency; // the frequency of this tree
     public HuffmanTree(int freq) { frequency = freq; }
@@ -32,6 +34,8 @@ class HuffmanNode extends HuffmanTree {
 }
  
 public class HuffmanCode {
+	
+	private static int curPos=0;
     // input is an array of frequencies, indexed by character code
     public static HuffmanTree buildTree(int[] charFreqs) {
         PriorityQueue<HuffmanTree> trees = new PriorityQueue<HuffmanTree>();
@@ -54,25 +58,25 @@ public class HuffmanCode {
         return trees.poll();
     }
  
-    public static void printCodes(HuffmanTree tree, StringBuffer prefix) {
+    public static void printCodes(HuffmanTree tree, StringBuffer prefix,String huffmanCode[]) {
         assert tree != null;
         if (tree instanceof HuffmanLeaf) {
             HuffmanLeaf leaf = (HuffmanLeaf)tree;
  
             // print out character, frequency, and code for this leaf (which is just the prefix)
             System.out.println(leaf.value + "\t" + leaf.frequency + "\t" + prefix);
- 
+            huffmanCode[leaf.value]=prefix.toString();
         } else if (tree instanceof HuffmanNode) {
             HuffmanNode node = (HuffmanNode)tree;
  
             // traverse left
             prefix.append('0');
-            printCodes(node.left, prefix);
+            printCodes(node.left, prefix,huffmanCode);
             prefix.deleteCharAt(prefix.length()-1);
  
             // traverse right
             prefix.append('1');
-            printCodes(node.right, prefix);
+            printCodes(node.right, prefix,huffmanCode);
             prefix.deleteCharAt(prefix.length()-1);
         }
     }
@@ -83,6 +87,8 @@ public class HuffmanCode {
         // we will assume that all our characters will have
         // code less than 256, for simplicity
         int[] charFreqs = new int[256];
+        
+        String haffmancode[]=new String[256];
         // read each character and record the frequencies
         for (char c : test.toCharArray())
             charFreqs[c]++;
@@ -92,6 +98,51 @@ public class HuffmanCode {
  
         // print out results
         System.out.println("SYMBOL\tWEIGHT\tHUFFMAN CODE");
-        printCodes(tree, new StringBuffer());
+        printCodes(tree, new StringBuffer(),haffmancode);
+        
+        /**
+         * 输出原来字符串的哈夫曼编码
+         * 
+         */
+        StringBuilder builder=new StringBuilder();
+        for(int i=0;i<test.length();i++){
+        	builder.append(haffmancode[((int)test.charAt(i))]);
+        }
+        System.out.println("Origin String");
+        System.out.println(test);
+        System.out.println("Haffuman String");
+        System.out.println(builder.toString());
+        
+        /**
+         * 解码
+         */
+        System.out.println("decode haffman String");
+        System.out.println(decode(tree, builder.toString(), new StringBuilder()));
+    }
+    
+    public static String decode(HuffmanTree treeRoot,String encodeString,StringBuilder builder){
+    	long lenght=encodeString.length();
+         curPos=0;
+    	while(curPos<lenght){
+    		builder.append(getChar(treeRoot, encodeString));
+    	}
+    	return builder.toString();
+    }
+    
+    private static char getChar(HuffmanTree tree,String encodeString ){
+    	if(tree instanceof HuffmanLeaf){
+    		HuffmanLeaf leaf=(HuffmanLeaf)tree;
+    		return leaf.value;
+    	}else{
+    		HuffmanNode node=(HuffmanNode)tree;
+    		if(encodeString.charAt(curPos)=='1'){
+    			curPos++;
+    			return getChar(node.right,encodeString);
+    		}else if(encodeString.charAt(curPos)=='0'){
+    			curPos++;
+    			return getChar(node.left, encodeString);
+    		}
+    	}
+    	return ' ';
     }
 }
