@@ -256,7 +256,7 @@ public class MyAVLTree<T extends Comparable<T>, V> {
 			int cmp=key.compareTo(node.key);
 			if(0>cmp){
 				node.leftNode=remove(node.leftNode, key);
-				node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;
+			//	node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;   //统一在最后进行重新计算
 				if(2==getHeight(node.rightNode)-getHeight(node.leftNode)){
 					AVLNode<T, V> nodeRight=node.rightNode;
 					if(getHeight(nodeRight.leftNode)>getHeight(nodeRight.leftNode)){
@@ -267,7 +267,7 @@ public class MyAVLTree<T extends Comparable<T>, V> {
 				}
 			}else if (0<cmp){
 				node.rightNode=remove(node.rightNode, key);
-				node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;
+			//	node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;    //统一在最后进行重新计算
 				if(2==getHeight(node.leftNode)-getHeight(node.rightNode)){
 					AVLNode<T, V> nodeLeft=node.leftNode;
 					if(getHeight(nodeLeft.leftNode)>getHeight(nodeLeft.rightNode)){
@@ -283,19 +283,20 @@ public class MyAVLTree<T extends Comparable<T>, V> {
 						node.key=leftMaxNode.key;
 						node.value=leftMaxNode.value;
 						node.leftNode=remove(node.leftNode, leftMaxNode.key);
-						node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;
+						//node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;   //统一在最后进行重新计算
 					}else{//右子树高，从右子树取最小值
 						AVLNode<T, V> rightMinNode=mixNode(node.rightNode);
 						node.key=rightMinNode.key;
 						node.value=rightMinNode.value;
 						node.rightNode=remove(node.rightNode, rightMinNode.key);
-						node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;
+						//node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;    //统一在最后进行重新计算
 					}
 				}else{
 					return node.leftNode==null?node.rightNode:node.leftNode;
 				}
 			}
 		}
+		node.height=max(getHeight(node.leftNode), getHeight(node.rightNode))+1;
 		return node;
 	}
 	
