@@ -28,7 +28,7 @@ public class AVLTreeTest {
 		System.out.printf("== 树的详细信息: \n");
 		tree.print();
 
-		i = 8;
+		i = 11;
 		System.out.printf("\n== 删除根节点: %d", i);
 		tree.remove(i);
 

@@ -1,5 +1,12 @@
 package AVL树;
+/**
+ * 
+ * @author wangpeiyu
+ *
+ * @param <T>
+ */
 public class AVLTree<T extends Comparable<T>> {
+	
 	private AVLTreeNode<T> mRoot;	// 根结点
 
 	// AVL树的节点(内部类)
@@ -90,7 +97,7 @@ public class AVLTree<T extends Comparable<T>> {
 	}
 
 	/*
-	 * (递归实现)查找"AVL树x"中键值为key的节点
+	 * (递归实现)查找"AVL树"中键值为key的节点
 	 */
 	private AVLTreeNode<T> search(AVLTreeNode<T> x, T key) {
 		if (x==null)
@@ -110,7 +117,7 @@ public class AVLTree<T extends Comparable<T>> {
 	}
 
 	/*
-	 * (非递归实现)查找"AVL树x"中键值为key的节点
+	 * (非递归实现)查找"AVL树"中键值为key的节点
 	 */
 	private AVLTreeNode<T> iterativeSearch(AVLTreeNode<T> x, T key) {
 		while (x!=null) {
@@ -172,29 +179,28 @@ public class AVLTree<T extends Comparable<T>> {
 	}
 
 	/*
-	 * LL：左左对应的情况(左单旋转)。
+	 * LL：左左对应的情况(右单旋转)。
 	 *
 	 * 返回值：旋转后的根节点
 	 */
 	private AVLTreeNode<T> leftLeftRotation(AVLTreeNode<T> k2) {
 		AVLTreeNode<T> k1;
-
 		k1 = k2.left;
 		k2.left = k1.right;
 		k1.right = k2;
-
+		//k2的左子节点已经更改
 		k2.height = max( height(k2.left), height(k2.right)) + 1;
 		k1.height = max( height(k1.left), k2.height) + 1;
-
 		return k1;
 	}
 
 	/*
-	 * RR：右右对应的情况(右单旋转)。
+	 * RR：右右对应的情况(左单旋转)。
 	 *
 	 * 返回值：旋转后的根节点
 	 */
 	private AVLTreeNode<T> rightRightRotation(AVLTreeNode<T> k1) {
+		
 		AVLTreeNode<T> k2;
 
 		k2 = k1.right;
@@ -341,9 +347,7 @@ public class AVLTree<T extends Comparable<T>> {
 					tree.right = remove(tree.right, min);
 				}
 			} else {
-				AVLTreeNode<T> tmp = tree;
 				tree = (tree.left!=null) ? tree.left : tree.right;
-				tmp = null;
 			}
 		}
 
