@@ -83,6 +83,10 @@ public class Graph {
 		}
 	}
 	
+	public int getDistance(int v,int w){
+		return adj[v][w];
+	}
+	
 	public int[] getArrayOfV(int i){
 		if(i>=v()){
 			assert false;
