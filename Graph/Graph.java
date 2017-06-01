@@ -35,16 +35,16 @@ public class Graph {
 		this.adj = new int[v][v];
 		for (int i = 0; i < v; i++) {
 			for (int j = 0; j < v; j++) {
-				adj[i][j] = 0;
+				adj[i][j] = -1;
 			}
 		}
 	}
 
-	public void addEdge(int v, int w) throws IllegalArgumentException {
+	public void addEdge(int v, int w,int weight) throws IllegalArgumentException {
 		if (w < this.v && v < this.v) {
 
 			if (1 != adj[v][w]) {
-				adj[v][w] = adj[w][v] = 1;
+				adj[v][w] = adj[w][v] = weight;
 				e++;
 			}
 
@@ -73,7 +73,7 @@ public class Graph {
 		if (v < this.v) {
 			List<Integer> list = new ArrayList<Integer>();
 			for (int i = 0; i < this.v; i++) {
-				if (1 == adj[v][i]) {
+				if (-1 != adj[v][i]) {
 					list.add(i);
 				}
 			}
@@ -81,6 +81,15 @@ public class Graph {
 		} else {
 			throw new IllegalArgumentException("顶点序号大于本图的顶点数");
 		}
+	}
+	
+	public int[] getArrayOfV(int i){
+		if(i>=v()){
+			assert false;
+		}else{
+			return adj[i];
+		}
+		return null;
 	}
 
 	/**
@@ -90,15 +99,15 @@ public class Graph {
 	 */
 	public static void main(String[] args) {
 		Graph graph=new Graph(6);
-		graph.addEdge(0, 1);
-		graph.addEdge(0, 3);
-		graph.addEdge(0, 5);
-		graph.addEdge(1, 4);
-		graph.addEdge(1, 5);
-		graph.addEdge(2, 4);
-		graph.addEdge(2, 3);
-		graph.addEdge(3, 4);
-		graph.addEdge(0, 1);
+		graph.addEdge(0, 1,1);
+		graph.addEdge(0, 3,1);
+		graph.addEdge(0, 5,1);
+		graph.addEdge(1, 4,1);
+		graph.addEdge(1, 5,1);
+		graph.addEdge(2, 4,1);
+		graph.addEdge(2, 3,1);
+		graph.addEdge(3, 4,1);
+		graph.addEdge(0, 1,1);
 		System.out.println("图的边的条数是:"+graph.Edge());
 	}
 
