@@ -6,22 +6,35 @@ import org.omg.PortableServer.POA;
 
 import Graph.Graph;
 
+/**
+ * 只提供最短的路径长度，不记录实际的路径
+ * @author wangpeiyu
+ *
+ */
 public class Dijkstra {
 	
 	private Graph graph;
-	
+	//用于标记节点是否已经访问
 	private boolean mark[];
-	
+	//存储开始节点到各个节点的最短路径长度
 	private int distance[];
-	
+	//节点的个数
 	private int V;
 	
 	
 	public  Dijkstra(Graph graph){
-		this.graph=graph;
+		setGraph(graph);
+	}
+	
+	public void setGraph(Graph graph) {
+		assert graph==null;
+		this.graph = graph;
 		V=graph.v();
 	}
 	
+	/**
+	 * 开始执行Dijkstra算法
+	 */
 	private void doDijkstra(){
 		for(int i=1;i<V;i++){
 			int j=0,k=0,min=65535;
@@ -50,7 +63,13 @@ public class Dijkstra {
 		}
 	}
 	
-	
+	/**
+	 * 获取图中指定两个节点间的最短距离
+	 * 这里是使用了Dijkstra算法找到开始节点到所有节点的最短距离，然后返回需要的节点间的距离
+	 * @param StartV
+	 * @param EndV
+	 * @return
+	 */
 	public int getMinDistanceOfTwoV(int StartV,int EndV){
 		assert StartV<V&&EndV<V;
 		distance=graph.getArrayOfV(StartV);
@@ -63,6 +82,7 @@ public class Dijkstra {
 		doDijkstra();
 		return distance[EndV];
 	}
+	
 	
 	public static void main(String arg[]){
 		Graph graph = new Graph(9);
