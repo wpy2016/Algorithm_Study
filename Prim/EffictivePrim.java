@@ -1,6 +1,5 @@
 package Prim;
 
-import org.omg.PortableServer.POA;
 
 import Graph.Graph;
 
@@ -50,9 +49,11 @@ public class EffictivePrim {
 			// 横向遍历lowcastTemp,更新lowcast数组中的到每个节点的最短的边
 			for (int pos = 0; pos < graph.v(); pos++) {
 				if (0 != lowcast[pos]) {//当前的节点还没有处理
-					//第一种情况：当原来的与pos节点的距离为负数，也就是到不了，此时如果新找到的节点k，如果到pos节点的距离不是-1，也就是有距离，
+					//第一种情况：当原来的与pos节点的距离为负数，也就是到不了，此时如果新找到的节点k，如果到pos节点的距离不是-1，
+					// 也就是有距离，
 					//那就将pos节点的距离更新，而且将这条边的另一个源节点，放到lowcastOfV数组中，表示到达pos节点距离短的节点为k
-					//第二种情况：当原来的与pos节点的距离不是负数，但是新找到的节点k，到达pos节点的距离不是-1，也就是可到达，而且比原来的要短，此时也更新lowcast
+					//第二种情况：当原来的与pos节点的距离不是负数，但是新找到的节点k，到达pos节点的距离不是-1，也就是可到达，
+					// 而且比原来的要短，此时也更新lowcast
 					if (-1 == lowcast[pos] || (-1 != lowcast[pos] && lowcastTemp[pos] < lowcast[pos])) {
 						if(-1!=lowcastTemp[pos]){
 							lowcast[pos] = lowcastTemp[pos];

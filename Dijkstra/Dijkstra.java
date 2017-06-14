@@ -7,6 +7,7 @@ import org.omg.PortableServer.POA;
 import Graph.Graph;
 
 /**
+ * 单源最短路径
  * 只提供最短的路径长度，不记录实际的路径
  * @author wangpeiyu
  *
