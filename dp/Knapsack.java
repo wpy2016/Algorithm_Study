@@ -9,7 +9,8 @@ public class Knapsack {
 
     /**
      * 01背包问题
-     *
+     *有n个物品，每个物品的重量为weight[i]，每个物品的价值为value[i]。现在有一个背包，
+     * 它所能容纳的重量为total，问：当你面对这么多有价值的物品时，你的背包所能带走的最大价值是多少？
      * @param n
      * @param weightPkg
      * @param weight
@@ -38,6 +39,47 @@ public class Knapsack {
             }
         }
         return curWeightMaxValue[n - 1][weightPkg - 1];
+    }
+
+    /**
+     * 多重背包问题
+     * 有n种物品，每种物品有无限个，每个物品的重量为weight[i]，每个物品的价值为value[i]。
+     * 现在有一个背包，它所能容纳的重量为total，问：当你面对这么多有价值的物品时，你的背包所能带走的最大价值是多少？
+     * @param n
+     * @param weightPkg
+     * @param weiht
+     * @param value
+     * @return
+     */
+    public static int knapsackComplete(int n, int weightPkg, int[] weiht, int[] value){
+        int[] curWeightMaxValue = new int[weightPkg + 1];
+        /**
+         * 初始化数组
+         */
+        for(int i = 0;i <= weightPkg;++i){
+            curWeightMaxValue[i] = 0;
+        }
+        /**
+         * 01背包和完全背包的不同点是：
+         * 01背包问题 每种物品只有一个，也就是每个物品只能放一次
+         * 完全背包 每种物品有无限多个， 也就是说每个物品可以放多次
+         * 那放多次体现在那里呢？
+         * 体现在下面的第二层循环中，循环从重量为0 到 weightPkg重量
+         * 求解当前重量的时候，都是只根据当前重量减去weight[i]后重量对应的最大价值加上当前价值，和当前的价值比较，得到最大的价值
+         * 也就是说，这个时候可能存在，一个物品在前面的重量求解最大价值时已经加了一次，在后面求解最大价值时又加了，这就体现了一个物品放多次
+         * 而01背包都是使用 i - 1行的数据进行和当前的处理，所以保证了每个物品只放了一次
+         */
+        for(int i = 0;i < n;++i){//遍历所有物品
+            for(int j = 0;j <= weightPkg;++j){
+                if(j < weiht[i]){//放不下，那就是等于不放之前的值
+                    //当前重量的最大价值没有变化
+                }else{
+                    int maxValue = Math.max(curWeightMaxValue[j - weiht[i]] + value[i],curWeightMaxValue[j]);
+                    curWeightMaxValue[j] = maxValue;
+                }
+            }
+        }
+        return curWeightMaxValue[weightPkg - 1];
     }
 
     /**
@@ -75,7 +117,9 @@ public class Knapsack {
         int[] weight = new int[]{5, 4, 7, 2, 6};
         //对应每个物品的价值
         int[] value = new int[]{12, 3, 10, 3, 6};
-        System.out.println(knapsack01(n, weightPkg, weight, value));
+        System.out.println("01背包的最大值" + knapsack01(n, weightPkg, weight, value));
+        System.out.println("完全背包的最大值" + knapsackComplete(n, weightPkg, weight, value));
+
     }
 
 
