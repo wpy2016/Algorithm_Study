@@ -34,10 +34,29 @@ public class Main2 {
                     result[i][j] = -1;
                 }
             }
-            System.out.println(get(m,1,n,result));
+            Long start = System.currentTimeMillis();
+            System.out.println(getOptimize(m,1,n,result));
+            Long end = System.currentTimeMillis();
+            System.out.println("optimize cost time :" + (end - start));
+
+            start = System.currentTimeMillis();
+            System.out.println(getOrigin(m,1,n));
+            end = System.currentTimeMillis();
+            System.out.println("origin cost time :" + (end - start));
         }
     }
-    private static int get(int time ,int person,int totalPerson,int[][] result){
+
+    /**
+     * 优化的操作
+     * 对于相同的子问题，将结果保存起来，当遇到一样的问题时，可以直接取结果，没有必要再次进行计算
+     * 性能好
+     * @param time
+     * @param person
+     * @param totalPerson
+     * @param result
+     * @return
+     */
+    private static int getOptimize(int time , int person, int totalPerson, int[][] result){
         if(person == 0){
             person = totalPerson;
         }
@@ -56,23 +75,50 @@ public class Main2 {
                 if(result[person - 2 == -1 ?  totalPerson - 1 : person - 2][time - 2] != -1){
                     sub = result[person - 2 == -1 ?  totalPerson - 1 : person - 2][time - 2];
                 }else{
-                    sub = result[person - 2 == -1 ?  totalPerson - 1 : person - 2][time - 2] = get(time - 1,person - 1,totalPerson,result);
+                    sub = result[person - 2 == -1 ?  totalPerson - 1 : person - 2][time - 2] = getOptimize(time - 1,person - 1,totalPerson,result);
                 }
             }else{
-                sub = get(time - 1,person - 1,totalPerson,result);
+                sub = getOptimize(time - 1,person - 1,totalPerson,result);
             }
             int add = 0;
             if (time > 1) {
                 if(result[person == totalPerson ? 0 : person][time - 2] != -1){
                     add = result[person == totalPerson ? 0 : person][time - 2];
                 }else{
-                    add = result[person == totalPerson ? 0 : person][time - 2] = get(time - 1,person + 1,totalPerson,result);
+                    add = result[person == totalPerson ? 0 : person][time - 2] = getOptimize(time - 1,person + 1,totalPerson,result);
                 }
             }else{
-                add = get(time - 1,person + 1,totalPerson,result);
+                add = getOptimize(time - 1,person + 1,totalPerson,result);
             }
             result[person - 1][time - 1] = sub + add;
             return result[person - 1][time - 1];
+        }
+    }
+
+    /**
+     * 非优化的
+     * 相同的子问题，一样使用递归，没有使用之前已经算出的结果
+     * 耗时相当严重
+     * @param time
+     * @param person
+     * @param totalPerson
+     * @return
+     */
+    private static int getOrigin(int time , int person, int totalPerson){
+        if(person == 0){
+            person = totalPerson;
+        }
+        if(person == totalPerson + 1){
+            person = 1;
+        }
+        if(time == 0){
+            if(person == 1){
+                return 1;
+            }else{
+                return 0;
+            }
+        }else{
+            return getOrigin(time - 1,person - 1,totalPerson) + getOrigin(time - 1,person + 1,totalPerson);
         }
     }
 }
